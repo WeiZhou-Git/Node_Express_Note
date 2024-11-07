@@ -52,20 +52,17 @@ const uploadFile = (app, url) => {
 				return res.status(500).send({msg: err.message})
 			}
 			try {
-				// for(key in req.files) {
-				// 	req.files[key].forEach(async (ele, i) => {
-				// 		const fileUrl = req.protocol + "://" + req.get('host') + "/" + ele.destination.replace("public", "") + ele.filename;
-				// 		let poster = await handleVideo.videoFirstFrame(fileUrl); // 取第一帧为封面
-				// 		var ele = { ...ele,  fileUrl, poster};
-				// 		files.push(ele)
-				// 	})
-				// }
-				// const files = await Promise.all()
+				const files = [...req.files.videos || []]
+				const filesObj = await Promise.all(
+					files.map(async (ele, i) => {
+						const fileUrl = req.protocol + "://" + req.get('host') + "/" + ele.destination.replace("public", "") + ele.filename;
+						let poster = await handleVideo.videoFirstFrame(fileUrl); // 取第一帧为封面
+						var ele = { ...ele,  fileUrl, poster};
+						return ele
+					})
+				)
 
-				const files = req.files.videos
-
-				// console.log(req.files.videos)
-				res.status(200).json({files})
+				res.status(200).json({filesObj})
 			} catch(error) {
 				return res.status(500).send({msg: error.message})
 			}
