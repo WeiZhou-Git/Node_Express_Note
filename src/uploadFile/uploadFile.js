@@ -62,9 +62,9 @@ const uploadFile = (app, url) => {
 				// }
 				// const files = await Promise.all()
 
-				const files = 1
+				const files = req.files.videos
 
-				console.log(req.files.videos)
+				// console.log(req.files.videos)
 				res.status(200).json({files})
 			} catch(error) {
 				return res.status(500).send({msg: error.message})

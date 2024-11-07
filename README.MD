@@ -66,6 +66,13 @@ app.post('/users', upload.none(), (req, res) => {
 });
 ```
 
+&nbsp;
+> 导入 SQL
+
+```cmd
+source /path/to/your/setup.sql;
+```
+
 
 &nbsp;
 > fs 文件处理

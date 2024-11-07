@@ -26,7 +26,7 @@ const connection = mysql.createConnection({
 	host: 'localhost',
 	user: 'root',
 	password: 'root',
-	database: 'mysql_test'
+	database: 'user_mysql'
 })
 
 connection.connect((err) => {
@@ -40,7 +40,7 @@ connection.connect((err) => {
 // get
 app.get('/news', (req, res) => {
 	const msg = req.query.id;
-	let sql = msg ? `SELECT * FROM t_student where id = ${ msg }` : `SELECT * FROM t_student`;
+	let sql = msg ? `SELECT * FROM t_student where no = ${ msg }` : `SELECT * FROM t_student`;
 	connection.query(sql, (err, result, fields) => {
 		if(err) res.json({message: "err"});
 		// res.json({message: data.userData()});
@@ -56,22 +56,32 @@ app.get('/new/:msg', (req, res) => {
 	res.json({message: arr})
 })
 
+uploadFileFun.uploadFile(app, '/upload')
+
+const upload = multer();
 // post 
-app.post('/users', (req, res) => {
-	const username = req.body.username;
-	const password = req.body.password;
-	// res.send('Post 请求成功！');
-	res.json({userMsg: {
-		username,
-		password,
-	}})
+app.post('/setUser', upload.none(), (req, res) => {
+
+	const { no, name, sex, classno, birth } = req.body || {};
+
+	
+	let sql = `INSERT INTO \`t_student\` (\`no\`, \`name\`, \`sex\`, \`classno\`, \`birth\`) VALUES (?, ?, ?, ?, ?)`
+	// // res.send('Post 请求成功！');
+
+	connection.query(sql, [no, name, sex, classno, birth], (err, result, fields) => {
+		if(err) {
+			return res.json({message: err.message});
+		}
+		// res.json({message: data.userData()});
+		res.json({message: { no, name, sex, classno, birth }});
+
+	})
 	// res.json({message: []})
 })
 
 
-uploadFileFun.uploadFile(app, '/upload')
 
-
+	
 // 服务执行
 // app.listen(process.env.PORT, () => {
 // 	console.log(__dirname);
