@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onClick="sendMsg('我是发送的消息')">send</button>
+    <script>
+        const ws = new WebSocket('ws://localhost:8080');
+
+        // 连接成功
+        ws.onopen = () => {
+            ws.send('Hello from the browser!!');
+        };
+
+        // 接受消息
+        ws.onmessage = (event) => {
+            console.log('Message from server:', event.data);
+        };
+
+        // 断开连接
+        ws.onclose = () => {
+            console.log('Disconnected from WebSocket server');
+        };
+
+        // 发送
+        function sendMsg(e) {
+            ws.send(e);
+        }
+
+    </script>
+</body>
+</html>

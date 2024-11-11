@@ -56,10 +56,8 @@ app.get('/new/:msg', (req, res) => {
 	res.json({message: arr})
 })
 
-uploadFileFun.uploadFile(app, '/upload')
-
-const upload = multer();
 // post 
+const upload = multer();
 app.post('/setUser', upload.none(), (req, res) => {
 
 	const { no, name, sex, classno, birth } = req.body || {};
@@ -79,6 +77,9 @@ app.post('/setUser', upload.none(), (req, res) => {
 	// res.json({message: []})
 })
 
+
+// 上传多图片/视频
+uploadFileFun.uploadFile(app, '/upload')
 
 
 	
